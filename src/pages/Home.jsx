@@ -28,8 +28,8 @@ const translations = {
 
 const prompts = {
   fr: (poste) => `Génère une liste de 5 questions d'entretien techniques et comportementales pertinentes pour le poste de : ${poste}. Réponds en français de manière professionnelle tout en donnant une introduction, les questions typiques et des conseils.`,
-  en: (poste) => `Generate a list of 5 relevant technical and behavioral interview questions for the position of: ${poste}. Respond in English professionally while providing an introduction, typical questions and advice..`,
-  es: (poste) => `Genera una lista de 5 preguntas de entrevista técnicas y conductuales relevantes para el puesto de: ${poste}. Responde en español de manera profesional a la vez que se ofrece una introducción, preguntas frecuentes y consejos.`
+  en: (poste) => `Generate a list of 5 relevant technical and behavioral interview questions for the position of: ${poste}. Respond in English professionally while providing an introduction, typical questions and advice.`,
+  es: (poste) => `Genera una lista de 5 preguntas de entrevista techniques y conductuales relevantes para el puesto de: ${poste}. Responde en español de manera profesional a la vez que se ofrece una introducción, preguntas frecuentes y consejos.`
 };
 
 export default function Home({ lang }) {
@@ -66,7 +66,20 @@ export default function Home({ lang }) {
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      setQuestions(data.choices[0].message.content);
+      const texteGenere = data.choices[0].message.content;
+      
+      setQuestions(texteGenere);
+
+      // Sauvegarde locale automatique dans l'historique
+      const nouvelEntretien = {
+        id: Date.now(),
+        poste: poste,
+        date: new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : lang === 'es' ? 'es-ES' : 'en-US'),
+        questions: texteGenere
+      };
+      
+      const historiqueActuel = JSON.parse(localStorage.getItem('intelliview_history') || '[]');
+      localStorage.setItem('intelliview_history', JSON.stringify([nouvelEntretien, ...historiqueActuel]));
 
     } catch (err) {
       console.error(err);
