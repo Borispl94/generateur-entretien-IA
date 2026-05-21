@@ -1,35 +1,72 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+// IMPORTATION DE LA BIBLIOTHÈQUE DE TÉLÉCHARGEMENT DIRECT PDF
+import { jsPDF } from 'jspdf';
 
 const styles = {
-  header: "mb-10 text-center",
-  title: "text-4xl md:text-5xl font-extrabold mb-3 tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#FFF8DC] to-[#D4AF37]",
-  subtitle: "text-neutral-400 font-light tracking-wide uppercase text-sm",
-  mainCard: "w-full max-w-2xl mx-auto bg-neutral-900/80 backdrop-blur-md rounded-2xl p-8 border border-[#D4AF37]/30 shadow-[0_0_40px_rgba(212,175,55,0.05)]",
-  formGroup: "space-y-6",
-  label: "block text-sm font-medium text-neutral-300 mb-2 uppercase tracking-wide",
-  input: "w-full px-5 py-4 bg-black border border-neutral-700 rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] text-white placeholder-neutral-600 transition-all duration-300",
-  submitButton: "w-full py-4 px-6 bg-[#D4AF37] hover:bg-[#E5C158] text-black font-bold uppercase tracking-widest rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center",
-  loaderContainer: "flex items-center gap-3",
-  loaderIcon: "animate-spin h-5 w-5 text-black",
-  errorCard: "mt-8 p-5 bg-red-950/30 border border-red-500/50 rounded-lg text-red-200 text-sm",
-  errorTitle: "font-semibold uppercase tracking-wide",
-  errorMessage: "mt-2 text-red-300/80",
-  resultCard: "mt-10 p-8 bg-neutral-950/60 backdrop-blur-sm rounded-2xl relative overflow-hidden",
-  resultTitle: "text-lg font-semibold mb-8 pb-4 border-b border-neutral-800 flex items-center gap-3 uppercase tracking-widest text-neutral-200",
-  resultText: "prose prose-invert max-w-none prose-p:font-light prose-p:text-neutral-300 prose-headings:text-[#D4AF37] prose-headings:font-bold prose-strong:text-[#D4AF37] prose-strong:font-semibold prose-li:text-neutral-300 marker:text-[#D4AF37]"
+  container: "w-full max-w-3xl mx-auto mt-20 md:mt-32 px-6 flex flex-col items-center animate-in fade-in duration-1000",
+  
+  header: "mb-16 text-center w-full",
+  title: "text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white",
+  titleGlow: "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FFF8DC]",
+  subtitle: "text-neutral-500 font-light tracking-[0.3em] uppercase text-xs md:text-sm",
+
+  formGroup: "w-full space-y-8 relative",
+  inputWrapper: "relative w-full group",
+  input: "w-full px-0 py-4 bg-transparent border-b border-neutral-800 focus:outline-none focus:border-[#D4AF37] text-white text-xl md:text-2xl placeholder-neutral-800 transition-colors duration-500",
+  
+  submitButton: "w-full py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center border border-neutral-800 hover:border-[#D4AF37] hover:text-[#D4AF37] text-neutral-400 disabled:opacity-0 disabled:pointer-events-none",
+
+  loaderWrapper: "w-full mt-24 flex flex-col items-center justify-center space-y-6 animate-in fade-in duration-700",
+  loaderIcon: "w-12 h-12 rounded-full border-[1px] border-neutral-900 border-t-[#D4AF37] animate-spin",
+  loaderText: "text-[#D4AF37] uppercase tracking-[0.4em] text-[10px] animate-pulse",
+
+  resultWrapper: "w-full mt-20 animate-in slide-in-from-bottom-8 fade-in duration-1000",
+  
+  resultHeader: "flex flex-col md:flex-row md:items-center justify-between mb-12 border-b border-neutral-900 pb-4 gap-4",
+  resultTitle: "text-xs font-bold text-neutral-500 uppercase tracking-[0.3em]",
+  
+  btnGroup: "flex flex-wrap gap-3",
+  downloadBtn: "flex items-center justify-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest border border-neutral-800 text-neutral-400 rounded-full hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all duration-300",
+  pdfBtn: "flex items-center justify-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest border border-[#D4AF37]/40 text-[#D4AF37] rounded-full hover:bg-[#D4AF37] hover:text-black transition-all duration-300",
+
+  resultText: "prose prose-invert max-w-none prose-p:font-light prose-p:text-neutral-400 prose-p:leading-relaxed prose-headings:text-white prose-headings:font-bold prose-strong:text-[#D4AF37] prose-strong:font-semibold prose-li:text-neutral-300 marker:text-[#D4AF37]"
 };
 
 const translations = {
-  fr: { title: "Générateur d'Entretien", subtitle: "Propulsé par l'Intelligence Artificielle", label: "Poste visé", placeholder: "Ex: Architecte Cloud, Data Scientist...", btnGen: "Générer les questions", btnLoad: "Analyse en cours...", errTitle: "⚠️ Erreur de connexion", resTitle: "Questions suggérées" },
-  en: { title: "Interview Generator", subtitle: "Powered by Artificial Intelligence", label: "Target Position", placeholder: "Ex: Cloud Architect, Data Scientist...", btnGen: "Generate Questions", btnLoad: "Analyzing...", errTitle: "⚠️ Connection Error", resTitle: "Suggested Questions" },
-  es: { title: "Generador de Entrevistas", subtitle: "Impulsado por Inteligencia Artificial", label: "Puesto deseado", placeholder: "Ej: Arquitecto Cloud, Data Scientist...", btnGen: "Generar preguntas", btnLoad: "Analizando...", errTitle: "⚠️ Error de conexión", resTitle: "Preguntas sugeridas" }
+  fr: { title1: "Générateur", title2: "d'Entretien", subtitle: "Propulsé par l'IA", placeholder: "Ex: Architecte Cloud, Data Scientist...", btnGen: "Générer les questions", loading: "Génération en cours...", resTitle: "Simulation technique", btnMarkdown: "Markdown", btnPDF: "PDF" },
+  en: { title1: "Interview", title2: "Generator", subtitle: "AI Powered", placeholder: "Ex: Cloud Architect, Data Scientist...", btnGen: "Generate questions", loading: "Generating...", resTitle: "Technical Simulation", btnMarkdown: "Markdown", btnPDF: "PDF" },
+  es: { title1: "Generador", title2: "de Entrevistas", subtitle: "Impulsado por IA", placeholder: "Ej: Arquitecto Cloud, Data Scientist...", btnGen: "Generar preguntas", loading: "Generando...", resTitle: "Simulación Técnica", btnMarkdown: "Markdown", btnPDF: "PDF" }
 };
 
 const prompts = {
-  fr: (poste) => `Génère une liste de 5 questions d'entretien techniques et comportementales pertinentes pour le poste de : ${poste}. Réponds en français de manière professionnelle tout en donnant une introduction, les questions typiques et des conseils.`,
-  en: (poste) => `Generate a list of 5 relevant technical and behavioral interview questions for the position of: ${poste}. Respond in English professionally while providing an introduction, typical questions and advice.`,
-  es: (poste) => `Genera una lista de 5 preguntas de entrevista techniques y conductuales relevantes para el puesto de: ${poste}. Responde en español de manera profesional a la vez que se ofrece una introducción, preguntas frecuentes y consejos.`
+  fr: (poste) => `Tu es un expert en recrutement technique. Prépare un guide d'entretien pour le poste de : ${poste}. Réponds en français. 
+  Ta réponse DOIT suivre strictement ce format en Markdown :
+  ### 🎯 Introduction
+  (Rédige une brève introduction de 2 lignes maximum sur les attentes de ce poste)
+  ### 📝 Questions d'entretien
+  (Liste 5 questions pertinentes, mêlant technique et comportemental)
+  ### 💡 Conseils de réussite
+  (Donne 3 conseils clés rapides pour briller à cet entretien)
+  Règle absolue : Arrête-toi immédiatement après le dernier conseil.`,
+  en: (poste) => `You are an expert technical recruiter. Prepare an interview guide for the position of: ${poste}. Respond in English. 
+  Your response MUST strictly follow this Markdown format:
+  ### 🎯 Introduction
+  (Write a brief introduction of 2 lines maximum about the expectations for this role)
+  ### 📝 Interview Questions
+  (List 5 relevant questions, mixing technical and behavioral)
+  ### 💡 Success Tips
+  (Provide 3 quick key tips to shine in this interview)
+  Absolute rule: Stop immediately after the last tip.`,
+  es: (poste) => `Eres un expert en selección de personal técnico. Prepara una guía de entrevista para el puesto de: ${poste}. Responde en español. 
+  Tu respuesta DEBE seguir strictement este formato en Markdown:
+  ### 🎯 Introducción
+  (Escribe una breve introducción de máximo 2 líneas sobre las expectativas de este puesto)
+  ### 📝 Preguntas de Entrevista
+  (Enumera 5 preguntas relevantes, mezclando técnicas y conductuales)
+  ### 💡 Consejos de Éxito
+  (Da 3 consejos clave rápidos para brillar en esta entrevista)
+  Regla absoluta: Detente inmediatamente después del último consejo.`
 };
 
 export default function Home({ lang }) {
@@ -39,6 +76,7 @@ export default function Home({ lang }) {
   const [error, setError] = useState(null);
 
   const t = translations[lang];
+  const nomFichierNettoye = poste.trim().replace(/\s+/g, '_');
 
   const genererEntretien = async (e) => {
     e.preventDefault();
@@ -70,7 +108,6 @@ export default function Home({ lang }) {
       
       setQuestions(texteGenere);
 
-      // Sauvegarde locale automatique dans l'historique
       const nouvelEntretien = {
         id: Date.now(),
         poste: poste,
@@ -89,59 +126,161 @@ export default function Home({ lang }) {
     }
   };
 
+  // 1. TÉLÉCHARGEMENT DIRECT MARKDOWN (.md)
+  const telechargerMarkdown = () => {
+    if (!questions) return;
+    const blob = new Blob([questions], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Entretien_${nomFichierNettoye}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // 2. TÉLÉCHARGEMENT DIRECT PDF (.pdf) - CRASH PROOF ET SANS POPUP
+  const telechargerPDF = () => {
+    if (!questions) return;
+
+    // Initialisation du document A4 blanc (format standard d'impression)
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    
+    const margin = 20;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const maxLineWidth = pageWidth - (margin * 2);
+    let yPosition = 25;
+
+    // --- EN-TÊTE DU DOCUMENT ---
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(212, 175, 55); // Couleur dorée premium #D4AF37
+    doc.text(`INTELLIVIEW : ${poste.toUpperCase()}`, margin, yPosition);
+    
+    // Petite ligne séparatrice élégante sous le titre
+    yPosition += 6;
+    doc.setDrawColor(230, 230, 230);
+    doc.line(margin, yPosition, pageWidth - margin, yPosition);
+    yPosition += 12;
+
+    // --- PARSAGE DU CONTENU MARKDOWN ---
+    const lignes = questions.split('\n');
+
+    lignes.forEach((ligne) => {
+      let textClean = ligne.trim();
+      
+      // Ligne vide = saut de paragraphe
+      if (!textClean) {
+        yPosition += 4;
+        return;
+      }
+
+      // Traitement des titres Markdown (ex: ### 🎯 Introduction)
+      if (textClean.startsWith('###') || textClean.startsWith('##')) {
+        textClean = textClean.replace(/^#+\s*/, '').trim(); // Retire les '#'
+        doc.setFont("Helvetica", "bold");
+        doc.setFontSize(13);
+        doc.setTextColor(212, 175, 55); // Titres de sections dorés
+        yPosition += 6;
+      } 
+      // Traitement du texte normal et des listes
+      else {
+        textClean = textClean.replace(/\*\*/g, ''); // Supprime les astérisques de gras du Markdown
+        doc.setFont("Helvetica", "normal");
+        doc.setFontSize(10.5);
+        doc.setTextColor(50, 50, 50); // Texte gris très foncé (style éditeur)
+      }
+
+      // Gestion du retour à la ligne automatique si le texte dépasse la largeur A4
+      const textWrap = doc.splitTextToSize(textClean, maxLineWidth);
+      
+      textWrap.forEach((phrase) => {
+        // Sécurité de fin de page : si on arrive en bas, on crée une nouvelle page A4 automatiquement
+        if (yPosition > 275) {
+          doc.addPage();
+          yPosition = 25;
+        }
+        doc.text(phrase, margin, yPosition);
+        yPosition += 6.5; // Hauteur de ligne (Line height)
+      });
+    });
+
+    // ÉXÉCUTION DU TÉLÉCHARGEMENT DIRECT SUR L'APPAREIL
+    doc.save(`Entretien_${nomFichierNettoye}.pdf`);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center mt-10">
+    <div className={styles.container}>
+      
       <header className={styles.header}>
-        <h1 className={styles.title}>{t.title}</h1>
+        <h1 className={styles.title}>
+          {t.title1} <span className={styles.titleGlow}>{t.title2}</span>
+        </h1>
         <p className={styles.subtitle}>{t.subtitle}</p>
       </header>
 
-      <main className={styles.mainCard}>
-        <form onSubmit={genererEntretien} className={styles.formGroup}>
-          <div>
-            <label htmlFor="poste" className={styles.label}>{t.label}</label>
-            <input
-              id="poste"
-              type="text"
-              value={poste}
-              onChange={(e) => setPoste(e.target.value)}
-              placeholder={t.placeholder}
-              className={styles.input}
-              disabled={isLoading}
-            />
-          </div>
+      <form onSubmit={genererEntretien} className={styles.formGroup}>
+        <div className={styles.inputWrapper}>
+          <input
+            id="poste"
+            type="text"
+            value={poste}
+            onChange={(e) => setPoste(e.target.value)}
+            placeholder={t.placeholder}
+            className={styles.input}
+            disabled={isLoading}
+            autoComplete="off"
+          />
+        </div>
 
-          <button type="submit" disabled={isLoading || !poste.trim()} className={styles.submitButton}>
-            {isLoading ? (
-              <span className={styles.loaderContainer}>
-                <svg className={styles.loaderIcon} fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                {t.btnLoad}
-              </span>
-            ) : t.btnGen}
+        {!isLoading && !questions && (
+          <button type="submit" disabled={!poste.trim()} className={styles.submitButton}>
+            {t.btnGen}
           </button>
-        </form>
-
-        {error && (
-          <div className={styles.errorCard}>
-            <p className={styles.errorTitle}>{t.errTitle}</p>
-            <p className={styles.errorMessage}>{error}</p>
-          </div>
         )}
+      </form>
 
-        {questions && (
-          <div className={styles.resultCard}>
+      {error && (
+        <div className="mt-10 text-red-500 text-sm tracking-wide font-light">
+          {error}
+        </div>
+      )}
+
+      {isLoading && (
+        <div className={styles.loaderWrapper}>
+          <div className={styles.loaderIcon}></div>
+          <p className={styles.loaderText}>{t.loading}</p>
+        </div>
+      )}
+
+      {questions && !isLoading && (
+        <div className={styles.resultWrapper}>
+          
+          <div className={styles.resultHeader}>
             <h2 className={styles.resultTitle}>
-              <span className="text-[#D4AF37]">✦</span> {t.resTitle}
+              <span className="text-[#D4AF37] mr-3">✦</span> {t.resTitle}
             </h2>
-            <div className={styles.resultText}>
-              <ReactMarkdown>{questions}</ReactMarkdown>
+            
+            <div className={styles.btnGroup}>
+              <button onClick={telechargerMarkdown} className={styles.downloadBtn} title="Télécharger le fichier Markdown">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                {t.btnMarkdown}
+              </button>
+              
+              <button onClick={telechargerPDF} className={styles.pdfBtn} title="Télécharger le fichier PDF directement sur l'appareil">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                {t.btnPDF}
+              </button>
             </div>
           </div>
-        )}
-      </main>
+
+          <div className={styles.resultText}>
+            <ReactMarkdown>{questions}</ReactMarkdown>
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 }

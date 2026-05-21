@@ -1,51 +1,51 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-// Dictionnaire des styles du tableau de bord
+// Dictionnaire des styles pour le mode Plein Écran (Dashboard)
 const styles = {
-  container: "w-full max-w-5xl mx-auto mt-6 grid grid-cols-1 md:grid-cols-3 gap-8",
+  // Conteneur principal : Annule les paddings globaux, prend 100% de la vue sous le header
+  container: "w-[calc(100%+2rem)] -ml-4 -mt-4 h-[calc(100vh-80px)] flex flex-col md:flex-row overflow-hidden bg-black",
   
-  // Panneau de gauche (Liste)
-  sidebar: "bg-neutral-900/80 backdrop-blur-md rounded-2xl p-6 border border-[#D4AF37]/20 h-[70vh] overflow-y-auto space-y-4",
-  sidebarTitle: "text-sm font-bold text-[#D4AF37] uppercase tracking-widest border-b border-neutral-800 pb-3",
-  emptyText: "text-neutral-500 font-light text-sm text-center py-8",
+  // Panneau de gauche (Sidebar fixe) : Plus d'arrondis, bordure droite uniquement
+  sidebar: "w-full md:w-80 flex-shrink-0 bg-neutral-950/80 border-r border-neutral-900 p-6 overflow-y-auto flex flex-col gap-4",
+  sidebarTitle: "text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] border-b border-neutral-900 pb-4 sticky top-0 bg-neutral-950/80 backdrop-blur-md pt-2 z-10",
+  emptyText: "text-neutral-600 font-light text-sm text-center py-10",
   
-  // Onglets de la liste
-  itemCard: "w-full p-4 rounded-xl border transition-all duration-300 text-left flex items-start justify-between gap-2 group",
-  itemActive: "bg-neutral-950 border-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)]",
-  itemInactive: "bg-black/40 border-neutral-800 hover:border-neutral-600",
+  // Onglets de la liste (Design plat, style onglet latéral)
+  itemCard: "w-full p-4 rounded-lg transition-all duration-200 text-left flex items-start justify-between gap-2 group border-l-2",
+  itemActive: "bg-neutral-900 border-[#D4AF37] text-white shadow-sm",
+  itemInactive: "border-transparent text-neutral-500 hover:bg-neutral-900/50 hover:text-neutral-300",
   
   itemPoste: "font-medium text-sm tracking-wide truncate max-w-[180px]",
-  itemDate: "text-[10px] text-neutral-500 mt-1 uppercase tracking-wider",
-  deleteBtn: "text-neutral-600 hover:text-red-500 transition-colors p-1 text-xs",
+  itemDate: "text-[10px] mt-1 uppercase tracking-wider opacity-60",
+  deleteBtn: "text-neutral-700 hover:text-red-500 transition-colors p-1 text-xs",
   
-  // Panneau de droite (Visualisation)
-  previewPane: "md:col-span-2 bg-neutral-900/40 backdrop-blur-md rounded-2xl p-8 border border-neutral-800 h-[70vh] overflow-y-auto relative",
-  previewPlaceholder: "flex flex-col items-center justify-center h-full text-neutral-500 font-light text-sm tracking-wide",
-  previewIcon: "text-[#D4AF37] text-3xl mb-3 animate-pulse",
+  // Panneau de droite (Zone de lecture) : Occupe tout le reste de l'espace, fond transparent/noir pur
+  previewPane: "flex-1 overflow-y-auto p-10 md:p-16 relative",
+  previewPlaceholder: "flex flex-col items-center justify-center h-full text-neutral-600 font-light text-sm tracking-wide",
+  previewIcon: "text-[#D4AF37] text-4xl mb-4 opacity-50",
   
-  // Contenu Markdown
-  resultTitle: "text-lg font-semibold mb-6 pb-4 border-b border-neutral-800 flex items-center gap-3 uppercase tracking-widest text-neutral-200",
-  resultText: "prose prose-invert max-w-none prose-p:font-light prose-p:text-neutral-300 prose-headings:text-[#D4AF37] prose-headings:font-bold prose-strong:text-[#D4AF37] prose-strong:font-semibold prose-li:text-neutral-300 marker:text-[#D4AF37]"
+  // Contenu Markdown (Largeur max au centre pour le confort de lecture)
+  resultContainer: "max-w-4xl mx-auto",
+  resultTitle: "text-2xl font-bold mb-10 pb-6 border-b border-neutral-900 flex items-center gap-4 uppercase tracking-widest text-white",
+  resultText: "prose prose-invert max-w-none prose-p:font-light prose-p:text-neutral-400 prose-p:leading-relaxed prose-headings:text-[#D4AF37] prose-headings:font-bold prose-strong:text-white prose-strong:font-semibold prose-li:text-neutral-300 marker:text-[#D4AF37]"
 };
 
 // Traductions de la page d'historique
 const translations = {
-  fr: { title: "✦ Entretiens sauvegardés", empty: "Aucun historique disponible.", placeholder: "Sélectionnez un entretien pour afficher les détails.", labelQuestions: "Contenu de la simulation" },
-  en: { title: "✦ Saved Interviews", empty: "No history available.", placeholder: "Select an interview to view details.", labelQuestions: "Simulation Content" },
-  es: { title: "✦ Entrevistas guardadas", empty: "No hay historial disponible.", placeholder: "Seleccione una entrevista para ver los detalles.", labelQuestions: "Contenido de la simulación" }
+  fr: { title: "Entretiens", empty: "Aucun historique disponible.", placeholder: "Sélectionnez un entretien dans le menu latéral.", labelQuestions: "Contenu de la simulation" },
+  en: { title: "Interviews", empty: "No history available.", placeholder: "Select an interview from the sidebar.", labelQuestions: "Simulation Content" },
+  es: { title: "Entrevistas", empty: "No hay historial disponible.", placeholder: "Seleccione una entrevista en el menú lateral.", labelQuestions: "Contenido de la simulación" }
 };
 
 export default function Historique({ lang }) {
   const t = translations[lang];
 
-  // Initialisation de l'historique directement depuis le localStorage
   const [history, setHistory] = useState(() => {
     const storedHistory = localStorage.getItem('intelliview_history');
     return storedHistory ? JSON.parse(storedHistory) : [];
   });
 
-  // Initialisation de l'ID sélectionné au premier rendu
   const [selectedId, setSelectedId] = useState(() => {
     const storedHistory = localStorage.getItem('intelliview_history');
     if (storedHistory) {
@@ -55,7 +55,6 @@ export default function Historique({ lang }) {
     return null;
   });
 
-  // Fonction de suppression d'un élément
   const supprimerEntretien = (id, e) => {
     e.stopPropagation(); 
     
@@ -68,52 +67,49 @@ export default function Historique({ lang }) {
     }
   };
 
-  // Récupération de l'entretien actif à afficher à droite
   const entretienSelectionne = history.find(item => item.id === selectedId);
 
   return (
     <div className={styles.container}>
       
-      {
-        // Colonne de Gauche : Liste des archives
-      }
+      {/* Colonne de Gauche : Barre latérale pleine hauteur */}
       <aside className={styles.sidebar}>
         <h2 className={styles.sidebarTitle}>{t.title}</h2>
         
-        {history.length === 0 ? (
-          <p className={styles.emptyText}>{t.empty}</p>
-        ) : (
-          history.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setSelectedId(item.id)}
-              className={`${styles.itemCard} ${selectedId === item.id ? styles.itemActive : styles.itemInactive}`}
-            >
-              <div className="overflow-hidden">
-                <p className={`${styles.itemPoste} ${selectedId === item.id ? "text-[#D4AF37]" : "text-white"}`}>
-                  {item.poste}
-                </p>
-                <p className={styles.itemDate}>{item.date}</p>
-              </div>
-              
+        <div className="flex-1 overflow-y-auto space-y-2 pr-2">
+          {history.length === 0 ? (
+            <p className={styles.emptyText}>{t.empty}</p>
+          ) : (
+            history.map((item) => (
               <button
-                onClick={(e) => supprimerEntretien(item.id, e)}
-                className={styles.deleteBtn}
-                title="Supprimer"
+                key={item.id}
+                onClick={() => setSelectedId(item.id)}
+                className={`${styles.itemCard} ${selectedId === item.id ? styles.itemActive : styles.itemInactive}`}
               >
-                ✕
+                <div className="overflow-hidden">
+                  <p className={`${styles.itemPoste} ${selectedId === item.id ? "text-white" : ""}`}>
+                    {item.poste}
+                  </p>
+                  <p className={styles.itemDate}>{item.date}</p>
+                </div>
+                
+                <button
+                  onClick={(e) => supprimerEntretien(item.id, e)}
+                  className={styles.deleteBtn}
+                  title="Supprimer"
+                >
+                  ✕
+                </button>
               </button>
-            </button>
-          ))
-        )}
+            ))
+          )}
+        </div>
       </aside>
 
-      {
-        // Colonne de Droite : Visualiseur de contenu
-      }
+      {/* Colonne de Droite : Zone de lecture principale */}
       <section className={styles.previewPane}>
         {entretienSelectionne ? (
-          <div>
+          <div className={styles.resultContainer}>
             <h2 className={styles.resultTitle}>
               <span className="text-[#D4AF37]">✦</span> {entretienSelectionne.poste}
             </h2>
