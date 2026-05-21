@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
-import photoProfil from '../assets/photo_paly.jpg';
+import photoProfil from '../assets/photo_paly.JPG';
 import logoTailwind from '../assets/tailwind.jpeg';
 import logoMistral from '../assets/Mistral_logo.png';
 import logoReact from '../assets/react.svg';
-import logoVite from '../assets/vite.png';
+import logoVite from '../assets/Vite.png';
 import logoEsilv from '../assets/Logo_ESILV.png';
 import cvAlternance from '../assets/CV.pdf';
 import cvStage from '../assets/CV_PALY.pdf';
