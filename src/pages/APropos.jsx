@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import photoProfil from '../assets/photo_paly.jpg';
 import logoTailwind from '../assets/tailwind.jpeg';
-import logoMistral from '../assets/Mistral_AI_logo_(2025–).png';
+import logoMistral from '../assets/Mistral_logo.png';
 import logoReact from '../assets/react.svg';
 import logoVite from '../assets/vite.png';
 import logoEsilv from '../assets/Logo_ESILV.png';
