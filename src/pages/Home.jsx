@@ -189,7 +189,7 @@ export default function Home({ lang }) {
         textClean = textClean.replace(/\*\*/g, ''); // Supprime les astérisques de gras du Markdown
         doc.setFont("Helvetica", "normal");
         doc.setFontSize(10.5);
-        doc.setTextColor(50, 50, 50); // Texte gris très foncé (style éditeur)
+        doc.setTextColor(50, 50, 50); // Texte gris très foncé
       }
 
       // Gestion du retour à la ligne automatique si le texte dépasse la largeur A4
