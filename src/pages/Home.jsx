@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-// IMPORTATION DE LA BIBLIOTHÈQUE DE TÉLÉCHARGEMENT DIRECT PDF
 import { jsPDF } from 'jspdf';
 
 const styles = {
-  container: "w-full max-w-3xl mx-auto mt-20 md:mt-32 px-6 flex flex-col items-center animate-in fade-in duration-1000",
+  container: "w-full max-w-3xl mx-auto mt-16 md:mt-24 px-6 flex flex-col items-center animate-in fade-in duration-1000",
   
   header: "mb-16 text-center w-full",
   title: "text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white",
@@ -34,39 +33,15 @@ const styles = {
 };
 
 const translations = {
-  fr: { title1: "Générateur", title2: "d'Entretien", subtitle: "Propulsé par l'IA", placeholder: "Ex: Architecte Cloud, Data Scientist...", btnGen: "Générer les questions", loading: "Génération en cours...", resTitle: "Simulation technique", btnMarkdown: "Markdown", btnPDF: "PDF" },
-  en: { title1: "Interview", title2: "Generator", subtitle: "AI Powered", placeholder: "Ex: Cloud Architect, Data Scientist...", btnGen: "Generate questions", loading: "Generating...", resTitle: "Technical Simulation", btnMarkdown: "Markdown", btnPDF: "PDF" },
-  es: { title1: "Generador", title2: "de Entrevistas", subtitle: "Impulsado por IA", placeholder: "Ej: Arquitecto Cloud, Data Scientist...", btnGen: "Generar preguntas", loading: "Generando...", resTitle: "Simulación Técnica", btnMarkdown: "Markdown", btnPDF: "PDF" }
+  fr: { title1: "Générateur", title2: "d'Entretien", subtitle: "Propulsé par l'IA", placeholder: "Ex: Architecte Cloud, Data Scientist...", btnGen: "Générer les questions", loading: "Analyse du poste...", resTitle: "Simulation technique", btnMarkdown: "Markdown", btnPDF: "PDF" },
+  en: { title1: "Interview", title2: "Generator", subtitle: "AI Powered", placeholder: "Ex: Cloud Architect, Data Scientist...", btnGen: "Generate questions", loading: "Analyzing role...", resTitle: "Technical Simulation", btnMarkdown: "Markdown", btnPDF: "PDF" },
+  es: { title1: "Generador", title2: "de Entrevistas", subtitle: "Impulsado par IA", placeholder: "Ej: Arquitecto Cloud, Data Scientist...", btnGen: "Generar preguntas", loading: "Analizando puesto...", resTitle: "Simulación Técnica", btnMarkdown: "Markdown", btnPDF: "PDF" }
 };
 
 const prompts = {
-  fr: (poste) => `Tu es un expert en recrutement technique. Prépare un guide d'entretien pour le poste de : ${poste}. Réponds en français. 
-  Ta réponse DOIT suivre strictement ce format en Markdown :
-  ### 🎯 Introduction
-  (Rédige une brève introduction de 2 lignes maximum sur les attentes de ce poste)
-  ### 📝 Questions d'entretien
-  (Liste 5 questions pertinentes, mêlant technique et comportemental)
-  ### 💡 Conseils de réussite
-  (Donne 3 conseils clés rapides pour briller à cet entretien)
-  Règle absolue : Arrête-toi immédiatement après le dernier conseil.`,
-  en: (poste) => `You are an expert technical recruiter. Prepare an interview guide for the position of: ${poste}. Respond in English. 
-  Your response MUST strictly follow this Markdown format:
-  ### 🎯 Introduction
-  (Write a brief introduction of 2 lines maximum about the expectations for this role)
-  ### 📝 Interview Questions
-  (List 5 relevant questions, mixing technical and behavioral)
-  ### 💡 Success Tips
-  (Provide 3 quick key tips to shine in this interview)
-  Absolute rule: Stop immediately after the last tip.`,
-  es: (poste) => `Eres un expert en selección de personal técnico. Prepara una guía de entrevista para el puesto de: ${poste}. Responde en español. 
-  Tu respuesta DEBE seguir strictement este formato en Markdown:
-  ### 🎯 Introducción
-  (Escribe una breve introducción de máximo 2 líneas sobre las expectativas de este puesto)
-  ### 📝 Preguntas de Entrevista
-  (Enumera 5 preguntas relevantes, mezclando técnicas y conductuales)
-  ### 💡 Consejos de Éxito
-  (Da 3 consejos clave rápidos para brillar en esta entrevista)
-  Regla absoluta: Detente inmediatamente después del último consejo.`
+  fr: (poste) => `Tu es un expert en recrutement technique. Prépare un guide d'entretien pour le poste de : ${poste}. Réponds en français. Ta réponse DOIT suivre strictement ce format en Markdown : ### 🎯 Introduction (Rédige une brève introduction de 2 lignes maximum sur les attentes de ce poste) ### 📝 Questions d'entretien (Liste 5 questions pertinentes, mêlant technique et comportemental) ### 💡 Conseils de réussite (Donne 3 conseils clés rapides pour briller à cet entretien) Règle absolue : Arrête-toi immédiatement après le dernier conseil.`,
+  en: (poste) => `You are an expert technical recruiter. Prepare an interview guide for the position of: ${poste}. Respond in English. Your response MUST strictly follow this Markdown format: ### 🎯 Introduction (Write a brief introduction of 2 lines maximum about the expectations for this role) ### 📝 Interview Questions (List 5 relevant questions, mixing technical and behavioral) ### 💡 Success Tips (Provide 3 quick key tips to shine in this interview) Absolute rule: Stop immediately after the last tip.`,
+  es: (poste) => `Eres un expert en selección de personal técnico. Prepara una guía de entrevista para le puesto de: ${poste}. Responde en español. Tu respuesta DEBE suivre estrictamente este format en Markdown: ### 🎯 Introducción (Escribe una breve introducción de máximo 2 líneas sobre las expectativas de este puesto) ### 📝 Preguntas de Entrevista (Enumera 5 preguntas relevantes, mezclando técnicas y conductuales) ### 💡 Consejos de Éxito (Da 3 consejos clave rápidos para brillar en esta entrevista) Regla absoluta: Detente inmediatamente après el último consejo.`
 };
 
 export default function Home({ lang }) {
@@ -98,21 +73,57 @@ export default function Home({ lang }) {
         body: JSON.stringify({
           model: 'mistral-tiny', 
           messages: [{ role: 'user', content: prompts[lang](poste) }],
-          temperature: 0.7
+          temperature: 0.7,
+          stream: true 
         })
       });
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      const texteGenere = data.choices[0].message.content;
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
       
-      setQuestions(texteGenere);
+      let accumateurTexte = "";
+      let buffer = "";
+
+      setIsLoading(false);
+      setQuestions("");
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lignes = buffer.split("\n");
+        
+        buffer = lignes.pop();
+
+        for (const ligne of lignes) {
+          const ligneNettoyee = ligne.trim();
+          
+          if (ligneNettoyee === "data: [DONE]") break;
+          
+          if (ligneNettoyee.startsWith("data: ")) {
+            try {
+              const donneesJson = JSON.parse(ligneNettoyee.slice(6));
+              const tokenTexte = donneesJson.choices[0]?.delta?.content || "";
+              
+              if (tokenTexte) {
+                accumateurTexte += tokenTexte;
+                setQuestions(accumateurTexte); 
+              }
+            } catch {
+              continue;
+            }
+          }
+        }
+      }
 
       const nouvelEntretien = {
         id: Date.now(),
         poste: poste,
         date: new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : lang === 'es' ? 'es-ES' : 'en-US'),
-        questions: texteGenere
+        questions: accumateurTexte
       };
       
       const historiqueActuel = JSON.parse(localStorage.getItem('intelliview_history') || '[]');
@@ -120,13 +131,11 @@ export default function Home({ lang }) {
 
     } catch (err) {
       console.error(err);
-      setError("Impossible de joindre l'API Mistral.");
-    } finally {
+      setError("Impossible de joindre l'API Mistral ou flux interrompu.");
       setIsLoading(false);
     }
   };
 
-  // 1. TÉLÉCHARGEMENT DIRECT MARKDOWN (.md)
   const telechargerMarkdown = () => {
     if (!questions) return;
     const blob = new Blob([questions], { type: 'text/markdown' });
@@ -140,73 +149,60 @@ export default function Home({ lang }) {
     URL.revokeObjectURL(url);
   };
 
-  // 2. TÉLÉCHARGEMENT DIRECT PDF (.pdf) - CRASH PROOF ET SANS POPUP
   const telechargerPDF = () => {
     if (!questions) return;
 
-    // Initialisation du document A4 blanc (format standard d'impression)
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    
     const margin = 20;
     const pageWidth = doc.internal.pageSize.getWidth();
     const maxLineWidth = pageWidth - (margin * 2);
     let yPosition = 25;
 
-    // --- EN-TÊTE DU DOCUMENT ---
     doc.setFont("Helvetica", "bold");
-    doc.setFontSize(20);
-    doc.setTextColor(212, 175, 55); // Couleur dorée premium #D4AF37
+    doc.setFontSize(16);
+    doc.setTextColor(212, 175, 55); 
     doc.text(`INTELLIVIEW : ${poste.toUpperCase()}`, margin, yPosition);
     
-    // Petite ligne séparatrice élégante sous le titre
     yPosition += 6;
     doc.setDrawColor(230, 230, 230);
     doc.line(margin, yPosition, pageWidth - margin, yPosition);
     yPosition += 12;
 
-    // --- PARSAGE DU CONTENU MARKDOWN ---
     const lignes = questions.split('\n');
 
     lignes.forEach((ligne) => {
       let textClean = ligne.trim();
       
-      // Ligne vide = saut de paragraphe
       if (!textClean) {
         yPosition += 4;
         return;
       }
 
-      // Traitement des titres Markdown (ex: ### 🎯 Introduction)
       if (textClean.startsWith('###') || textClean.startsWith('##')) {
-        textClean = textClean.replace(/^#+\s*/, '').trim(); // Retire les '#'
+        textClean = textClean.replace(/^#+\s*/, '').trim();
         doc.setFont("Helvetica", "bold");
-        doc.setFontSize(13);
-        doc.setTextColor(212, 175, 55); // Titres de sections dorés
-        yPosition += 6;
-      } 
-      // Traitement du texte normal et des listes
-      else {
-        textClean = textClean.replace(/\*\*/g, ''); // Supprime les astérisques de gras du Markdown
+        doc.setFontSize(12);
+        doc.setTextColor(212, 175, 55);
+        yPosition += 5;
+      } else {
+        textClean = textClean.replace(/\*\*/g, ''); 
         doc.setFont("Helvetica", "normal");
         doc.setFontSize(10.5);
-        doc.setTextColor(50, 50, 50); // Texte gris très foncé
+        doc.setTextColor(50, 50, 50);
       }
 
-      // Gestion du retour à la ligne automatique si le texte dépasse la largeur A4
       const textWrap = doc.splitTextToSize(textClean, maxLineWidth);
       
       textWrap.forEach((phrase) => {
-        // Sécurité de fin de page : si on arrive en bas, on crée une nouvelle page A4 automatiquement
         if (yPosition > 275) {
           doc.addPage();
           yPosition = 25;
         }
         doc.text(phrase, margin, yPosition);
-        yPosition += 6.5; // Hauteur de ligne (Line height)
+        yPosition += 6.5;
       });
     });
 
-    // ÉXÉCUTION DU TÉLÉCHARGEMENT DIRECT SUR L'APPAREIL
     doc.save(`Entretien_${nomFichierNettoye}.pdf`);
   };
 
@@ -229,12 +225,12 @@ export default function Home({ lang }) {
             onChange={(e) => setPoste(e.target.value)}
             placeholder={t.placeholder}
             className={styles.input}
-            disabled={isLoading}
+            disabled={isLoading || questions !== null}
             autoComplete="off"
           />
         </div>
 
-        {!isLoading && !questions && (
+        {questions === null && !isLoading && (
           <button type="submit" disabled={!poste.trim()} className={styles.submitButton}>
             {t.btnGen}
           </button>
@@ -254,12 +250,12 @@ export default function Home({ lang }) {
         </div>
       )}
 
-      {questions && !isLoading && (
+      {questions !== null && (
         <div className={styles.resultWrapper}>
           
           <div className={styles.resultHeader}>
             <h2 className={styles.resultTitle}>
-              <span className="text-[#D4AF37] mr-3">✦</span> {t.resTitle}
+              {t.resTitle}
             </h2>
             
             <div className={styles.btnGroup}>
@@ -268,7 +264,7 @@ export default function Home({ lang }) {
                 {t.btnMarkdown}
               </button>
               
-              <button onClick={telechargerPDF} className={styles.pdfBtn} title="Télécharger le fichier PDF directement sur l'appareil">
+              <button onClick={telechargerPDF} className={styles.pdfBtn} title="Télécharger le fichier PDF">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 {t.btnPDF}
               </button>

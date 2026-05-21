@@ -4,7 +4,7 @@ import photoProfil from '../assets/photo_paly.jpg';
 import logoTailwind from '../assets/tailwind.jpeg';
 import logoMistral from '../assets/Mistral_AI_logo_(2025–).png';
 import logoReact from '../assets/react.svg';
-import logoVite from '../assets/vite.svg';
+import logoVite from '../assets/vite.png';
 
 const styles = {
   container: "w-full max-w-3xl mx-auto pt-10 pb-20 px-6 flex flex-col items-center animate-in fade-in duration-700 selection:bg-[#D4AF37] selection:text-black",
@@ -40,7 +40,7 @@ const translations = {
     hero1: "L'intelligence artificielle",
     hero2: "au service du recrutement.",
     techLabel: "L'Architecture",
-    techDesc: "IntelliView n'est pas un simple chatbot, c'est une interface conçue pour la performance. Développée avec **React** et **Tailwind CSS**, l'application exploite la puissance de l'API **Mistral AI** via un modèle optimisé. Chaque réponse est le fruit d'un prompt engineering rigoureux, garantissant des conseils structurés et exploitables.",
+    techDesc: "IntelliView est une application front-end autonome (React 18 / Tailwind CSS) illustrant le concept de Privacy by Design. L'interface communique avec l'API Mistral AI via un Prompt Engineering avancé pour structurer l'analyse technique. Afin de garantir la confidentialité absolue des simulations, l'architecture ne repose sur aucune base de données tierce (Backend) : l'état applicatif, la sérialisation de l'historique et la compilation des exports (PDF/Markdown) sont exécutés localement via les API natives du navigateur (LocalStorage, Blob).",
     creatorLabel: "Conception & Développement",
     profileName: "Boris PALY",
     profileBio: "Étudiant ingénieur à l'ESILV Paris en mobilité à Riga. Passionné par les systèmes d'information complexes, le traitement de données massives et la sécurisation des infrastructures.",
@@ -53,7 +53,7 @@ const translations = {
     hero1: "Artificial intelligence serving",
     hero2: "the recruitment process.",
     techLabel: "The Architecture",
-    techDesc: "IntelliView is more than a chatbot; it's a performance-driven interface. Built with **React** and **Tailwind CSS**, it leverages **Mistral AI**'s power through an optimized model. Every response results from rigorous prompt engineering, ensuring structured and actionable advice.",
+    techDesc: "IntelliView is a standalone frontend application (React 18 / Tailwind CSS) illustrating the concept of Privacy by Design. The interface communicates with the Mistral AI API through advanced Prompt Engineering to structure technical analysis. To ensure absolute confidentiality of simulations, the architecture does not rely on any third-party databases (Backend): the application state, history serialization, and export compilation (PDF/Markdown) are executed locally via the browser's native APIs (LocalStorage, Blob).",
     creatorLabel: "Design & Development",
     profileName: "Boris PALY",
     profileBio: "Engineering student at ESILV Paris currently in Riga. Passionate about complex information systems, large-scale data analytics, and infrastructure security.",
@@ -66,7 +66,7 @@ const translations = {
     hero1: "La inteligencia artificial al servicio",
     hero2: "del reclutamiento.",
     techLabel: "La Arquitectura",
-    techDesc: "IntelliView no es solo un chatbot, es una interfaz diseñada para el rendimiento. Desarrollada con **React** et **Tailwind CSS**, la aplicación aprovecha el poder de la API de **Mistral AI**. Cada respuesta es el resultado de un prompt engineering riguroso, garantizando consejos estructurados.",
+    techDesc: "IntelliView es una aplicación frontend autónoma (React 18 / Tailwind CSS) que ilustra el concepto de Privacidad por Diseño. La interfaz se comunica con la API de Mistral AI a través de un Prompt Engineering avanzado para estructurar el análisis técnico. Para garantizar la confidencialidad absoluta de las simulaciones, la arquitectura no depende de bases de datos de terceros (Backend): el estado de la aplicación, la serialización del historial y la compilación de los exports (PDF/Markdown) se ejecutan localmente a través de las APIs nativas del navegador (LocalStorage, Blob).",
     creatorLabel: "Diseño y Desarrollo",
     profileName: "Boris PALY",
     profileBio: "Estudiante de ingeniería en ESILV París en movilidad en Riga. Apasionado por los sistemas de información complejos, el análisis de datos y la seguridad de los datos.",
