@@ -5,12 +5,15 @@ import logoTailwind from '../assets/tailwind.jpeg';
 import logoMistral from '../assets/Mistral_AI_logo_(2025–).png';
 import logoReact from '../assets/react.svg';
 import logoVite from '../assets/vite.png';
+import logoEsilv from '../assets/Logo_ESILV.png';
+import cvAlternance from '../assets/CV.pdf';
+import cvStage from '../assets/CV_PALY.pdf';
 
 const styles = {
   container: "w-full max-w-3xl mx-auto pt-10 pb-20 px-6 flex flex-col items-center animate-in fade-in duration-700 selection:bg-[#D4AF37] selection:text-black",
   
   heroSection: "text-center mb-16 w-full",
-  mainTitle: "text-4xl md:text-5xl font-bold mb-6 tracking-tighter text-white",
+  mainTitle: "text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white font-balkan",
   goldGradientText: "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FFF8DC]",
 
   techSection: "w-full text-center mb-16 flex flex-col items-center",
@@ -21,16 +24,21 @@ const styles = {
   marqueeContainer: "w-full max-w-2xl overflow-hidden relative flex py-8 mask-fade",
 
   profileSection: "w-full flex flex-col items-center text-center pt-10 border-t border-neutral-900",
-  imageWrapper: "relative w-32 h-32 mb-6",
-  profileImage: "w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500 ring-2 ring-[#D4AF37]/30 ring-offset-8 ring-offset-black",
+  imageWrapper: "relative w-40 h-52 mb-8",
+  profileImage: "w-full h-full rounded-xl object-cover transition-all duration-500 ring-1 ring-[#D4AF37]/30 ring-offset-8 ring-offset-black shadow-[0_0_30px_rgba(212,175,55,0.1)]",
   
-  profileName: "text-2xl font-bold text-white mb-3",
-  profileBio: "text-neutral-400 text-sm font-light leading-relaxed mb-8 max-w-lg",
+  profileName: "text-2xl font-bold text-white mb-4",
+  esilvLogo: "h-10 w-auto mb-6 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300",
+  profileBio: "text-neutral-400 text-sm font-light leading-relaxed mb-12 max-w-xl",
 
-  ctaBadge: "inline-flex flex-col items-center w-full max-w-sm p-6 bg-[#D4AF37] rounded-2xl text-black transition-transform hover:scale-[1.02] duration-300 shadow-[0_0_30px_rgba(212,175,55,0.15)]",
-  ctaStatus: "text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-2",
-  ctaMain: "font-bold text-[15px] leading-tight text-center",
-  ctaLoc: "text-xs mt-3 font-medium opacity-80",
+  availabilitySection: "w-full flex flex-col items-center pt-6 mb-12",
+  availabilityTitle: "text-[#D4AF37] text-xs font-bold uppercase tracking-[0.3em] mb-8 block",
+  gridContainer: "w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-6",
+  card: "p-6 border border-neutral-900 bg-neutral-950/20 rounded-xl text-center flex flex-col items-center justify-center transition-all duration-300 hover:border-[#D4AF37]/20 hover:bg-neutral-950/40",
+  cardTag: "inline-block px-3 py-0.5 text-[9px] font-bold uppercase tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] rounded-full mb-4",
+  cardText: "text-neutral-400 text-xs font-light leading-relaxed",
+
+  cvBtn: "flex items-center justify-center gap-2 px-6 py-2.5 mt-6 text-[10px] font-bold uppercase tracking-widest border border-[#D4AF37]/40 text-[#D4AF37] rounded-full hover:bg-[#D4AF37] hover:text-black transition-all duration-300",
 
   footer: "mt-24 pt-10 border-t border-neutral-900 w-full flex justify-center"
 };
@@ -40,39 +48,60 @@ const translations = {
     hero1: "L'intelligence artificielle",
     hero2: "au service du recrutement.",
     techLabel: "L'Architecture",
-    techDesc: "IntelliView est une application front-end autonome (React 18 / Tailwind CSS) illustrant le concept de Privacy by Design. L'interface communique avec l'API Mistral AI via un Prompt Engineering avancé pour structurer l'analyse technique. Afin de garantir la confidentialité absolue des simulations, l'architecture ne repose sur aucune base de données tierce (Backend) : l'état applicatif, la sérialisation de l'historique et la compilation des exports (PDF/Markdown) sont exécutés localement via les API natives du navigateur (LocalStorage, Blob).",
+    techDesc: "Conçue avec une architecture Serverless axée sur la performance, IntelliView est une Single Page Application (SPA) alimentée par React 18 et Tailwind CSS v4. Le cœur fonctionnel de l'outil s'appuie sur une intégration sécurisée de l'API Mistral AI. Un système strict de Prompt Engineering encadre le flux de données pour garantir des sorties déterministes et structurées. La persistance des sessions et la génération de documents (PDF/Markdown) sont entièrement gérées du côté client, montrant une bonne maîtrise des API modernes du navigateur.",
     creatorLabel: "Conception & Développement",
     profileName: "Boris PALY",
-    profileBio: "Étudiant ingénieur à l'ESILV Paris en mobilité à Riga. Passionné par les systèmes d'information complexes, le traitement de données massives et la sécurisation des infrastructures.",
-    ctaStatus: "Disponibilité Stage",
-    ctaMain: "Data Science / Cybersécurité (3 mois)",
-    ctaLoc: "📍 Allemagne · Belgique · Juillet 2026",
+    profileBio: "Étudiant en deuxième année de Bachelor Informatique et Cybersécurité à l'ESILV Paris (actuellement en mobilité académique à Riga), je suis passionné par les systèmes d'information complexes, le traitement de données massives et la sécurisation des infrastructures.",
+    availTitle: "Opportunités & Horizons",
+    stageTag: "Stage (3 Mois)",
+    stageField: "Data · Dév Web · Cybersécurité",
+    stageDate: "📅 À partir du 28 Juin 2026",
+    altTag: "Alternance (1 An)",
+    altField: "Data · Dév Web · Cybersécurité",
+    altDate: "📅 À partir du 28 Septembre 2026",
+    location: "📍 Paris & Île-de-France",
+    btnCvStage: "Télécharger le CV",
+    btnCvAlt: "Télécharger le CV",
     back: "Retour au générateur"
   },
   en: {
     hero1: "Artificial intelligence serving",
     hero2: "the recruitment process.",
     techLabel: "The Architecture",
-    techDesc: "IntelliView is a standalone frontend application (React 18 / Tailwind CSS) illustrating the concept of Privacy by Design. The interface communicates with the Mistral AI API through advanced Prompt Engineering to structure technical analysis. To ensure absolute confidentiality of simulations, the architecture does not rely on any third-party databases (Backend): the application state, history serialization, and export compilation (PDF/Markdown) are executed locally via the browser's native APIs (LocalStorage, Blob).",
+    techDesc: "Designed with a performance-focused serverless architecture, IntelliView is a Single Page Application (SPA) powered by React 18 and Tailwind CSS v4. The core functionality of the tool relies on a secure integration of the Mistral AI API. A rigorous Prompt Engineering system governs the data flow to ensure deterministic and structured output. Session persistence and document generation (PDF/Markdown) are handled entirely client-side, demonstrating a strong command of modern browser APIs.",
     creatorLabel: "Design & Development",
     profileName: "Boris PALY",
-    profileBio: "Engineering student at ESILV Paris currently in Riga. Passionate about complex information systems, large-scale data analytics, and infrastructure security.",
-    ctaStatus: "Internship availability",
-    ctaMain: "Data Science / Cybersecurity (3 months)",
-    ctaLoc: "📍 Germany · Belgium · July 2026",
+    profileBio: "Second-year student in the Computer Science and Cybersecurity Bachelor's program at ESILV Paris (currently on academic mobility in Riga), I am passionate about complex information systems, massive data processing, and infrastructure security.",
+    availTitle: "Opportunities & Horizons",
+    stageTag: "Internship (3 Months)",
+    stageField: "Data · Web Dev · Cybersecurity",
+    stageDate: "📅 Starting June 28, 2026",
+    altTag: "Apprenticeship (1 Year)",
+    altField: "Data · Web Dev · Cybersecurity",
+    altDate: "📅 Starting September 28, 2026",
+    location: "📍 Paris & Île-de-France",
+    btnCvStage: "Download Resume",
+    btnCvAlt: "Download Resume",
     back: "Back to Home"
   },
   es: {
     hero1: "La inteligencia artificial al servicio",
     hero2: "del reclutamiento.",
     techLabel: "La Arquitectura",
-    techDesc: "IntelliView es una aplicación frontend autónoma (React 18 / Tailwind CSS) que ilustra el concepto de Privacidad por Diseño. La interfaz se comunica con la API de Mistral AI a través de un Prompt Engineering avanzado para estructurar el análisis técnico. Para garantizar la confidencialidad absoluta de las simulaciones, la arquitectura no depende de bases de datos de terceros (Backend): el estado de la aplicación, la serialización del historial y la compilación de los exports (PDF/Markdown) se ejecutan localmente a través de las APIs nativas del navegador (LocalStorage, Blob).",
+    techDesc: "Diseñado con una arquitectura sin servidor centrada en el rendimiento, IntelliView es una aplicación de una sola página (SPA) basada en React 18 y Tailwind CSS v4. Su funcionalidad principal se basa en una integración segura de la API de IA de Mistral. Un riguroso sistema de ingeniería de mensajes gestiona el flujo de datos para garantizar una salida determinista y estructurada. La persistencia de la sesión y la generación de documentos (PDF/Markdown) se gestionan completamente del lado del cliente, lo que demuestra un dominio avanzado de las API de los navegadores modernos.",
     creatorLabel: "Diseño y Desarrollo",
     profileName: "Boris PALY",
-    profileBio: "Estudiante de ingeniería en ESILV París en movilidad en Riga. Apasionado por los sistemas de información complejos, el análisis de datos y la seguridad de los datos.",
-    ctaStatus: "Disponibilidad de prácticas",
-    ctaMain: "Data Science / Ciberseguridad (3 meses)",
-    ctaLoc: "📍 Alemania · Bélgica · Julio 2026",
+    profileBio: "Estudiante de segundo año de la Licenciatura en Informática y Ciberseguridad en ESILV París (actualmente en movilidad académica en Riga), me apasionan los sistemas de información complejos, el procesamiento masivo de datos y la seguridad de infraestructuras.",
+    availTitle: "Oportunidades y Horizontes",
+    stageTag: "Prácticas (3 Meses)",
+    stageField: "Datos · Dev Web · Ciberseguridad",
+    stageDate: "📅 A partir del 28 de junio de 2026",
+    altTag: "Alternancia (1 Año)",
+    altField: "Datos · Dev Web · Ciberseguridad",
+    altDate: "📅 A partir del 28 de septiembre de 2026",
+    location: "📍 París e Île-de-France",
+    btnCvStage: "Descargar CV",
+    btnCvAlt: "Descargar CV",
     back: "Volver al inicio"
   }
 };
@@ -80,16 +109,12 @@ const translations = {
 export default function APropos({ lang }) {
   const t = translations[lang];
 
-  // Classe de base pour tous les logos
-  const baseLogoClass = "w-auto object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer";
+  const baseLogoClass = "w-auto object-contain opacity-70";
 
-  // Configuration fine pour harmoniser les tailles et annuler le vide interne des images
   const stackLogos = [
     { src: logoReact, alt: "React", extraClasses: "h-10 md:h-12" },
     { src: logoVite, alt: "Vite", extraClasses: "h-10 md:h-12" },
-    // Agrandissement massif via scale pour que le visuel annule les marges blanches du JPEG
     { src: logoTailwind, alt: "Tailwind CSS", extraClasses: "h-10 md:h-12 scale-[1.4] md:scale-[1.7]" },
-    // Légère réduction de hauteur pour Mistral qui est plus massif horizontalement
     { src: logoMistral, alt: "Mistral AI", extraClasses: "h-7 md:h-9" }
   ];
 
@@ -97,6 +122,9 @@ export default function APropos({ lang }) {
     <div className={styles.container}>
       
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap');
+        .font-balkan { font-family: 'Philosopher', sans-serif; }
+        
         @keyframes marquee {
           0% { transform: translateX(0%); }
           100% { transform: translateX(-100%); }
@@ -107,9 +135,6 @@ export default function APropos({ lang }) {
         .mask-fade {
           mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
           -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-        }
-        .marquee-group:hover .animate-marquee {
-          animation-play-state: paused;
         }
       `}</style>
       
@@ -130,10 +155,7 @@ export default function APropos({ lang }) {
       <section className={styles.stackSection}>
         <span className={styles.sectionLabel}>Stack</span>
         
-        <div className={`marquee-group ${styles.marqueeContainer}`}>
-          {/* L'astuce de la boucle parfaite : 
-            gap-16 (espace entre logos) + pr-16 (espace à la fin du groupe) = transition invisible 
-          */}
+        <div className={styles.marqueeContainer}>
           <div className="flex items-center justify-start gap-16 md:gap-24 pr-16 md:pr-24 shrink-0 min-w-full animate-marquee">
             {stackLogos.map((logo, index) => (
               <img key={`g1-${index}`} src={logo.src} alt={logo.alt} className={`${baseLogoClass} ${logo.extraClasses}`} />
@@ -160,13 +182,45 @@ export default function APropos({ lang }) {
         </div>
         
         <h3 className={styles.profileName}>{t.profileName}</h3>
+        
+        <img 
+          src={logoEsilv} 
+          alt="ESILV Paris" 
+          className={styles.esilvLogo} 
+        />
+        
         <p className={styles.profileBio}>{t.profileBio}</p>
+      </section>
 
-        <a href="#" className={styles.ctaBadge}>
-          <span className={styles.ctaStatus}>{t.ctaStatus}</span>
-          <span className={styles.ctaMain}>{t.ctaMain}</span>
-          <span className={styles.ctaLoc}>{t.ctaLoc}</span>
-        </a>
+      <section className={styles.availabilitySection}>
+        <span className={styles.availabilityTitle}>{t.availTitle}</span>
+        <div className={styles.gridContainer}>
+          <div className={styles.card}>
+            <span className={styles.cardTag}>{t.stageTag}</span>
+            <div className={styles.cardText}>
+              <p className="text-white font-medium mb-1">{t.stageField}</p>
+              <p className="text-neutral-400 mb-2">{t.stageDate}</p>
+              <p className="text-neutral-500 font-medium text-[11px] uppercase tracking-wider">{t.location}</p>
+            </div>
+            <a href={cvStage} download="Boris_PALY_CV_Stage.pdf" className={styles.cvBtn}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              {t.btnCvStage}
+            </a>
+          </div>
+
+          <div className={styles.card}>
+            <span className={styles.cardTag}>{t.altTag}</span>
+            <div className={styles.cardText}>
+              <p className="text-white font-medium mb-1">{t.altField}</p>
+              <p className="text-neutral-400 mb-2">{t.altDate}</p>
+              <p className="text-neutral-500 font-medium text-[11px] uppercase tracking-wider">{t.location}</p>
+            </div>
+            <a href={cvAlternance} download="Boris_PALY_CV_Alternance.pdf" className={styles.cvBtn}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              {t.btnCvAlt}
+            </a>
+          </div>
+        </div>
       </section>
 
       <footer className={styles.footer}>

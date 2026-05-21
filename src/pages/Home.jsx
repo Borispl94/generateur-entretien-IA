@@ -6,7 +6,7 @@ const styles = {
   container: "w-full max-w-3xl mx-auto mt-16 md:mt-24 px-6 flex flex-col items-center animate-in fade-in duration-1000",
   
   header: "mb-16 text-center w-full",
-  title: "text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white",
+  title: "text-5xl md:text-7xl font-bold mb-6 tracking-tight text-white font-balkan",
   titleGlow: "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FFF8DC]",
   subtitle: "text-neutral-500 font-light tracking-[0.3em] uppercase text-xs md:text-sm",
 
@@ -209,6 +209,11 @@ export default function Home({ lang }) {
   return (
     <div className={styles.container}>
       
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap');
+        .font-balkan { font-family: 'Philosopher', sans-serif; }
+      `}</style>
+
       <header className={styles.header}>
         <h1 className={styles.title}>
           {t.title1} <span className={styles.titleGlow}>{t.title2}</span>
