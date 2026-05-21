@@ -3,7 +3,7 @@
 
 Un simulateur d'entretiens techniques propulsé par l'Intelligence Artificielle.
 
-Démo dans le lien ci-contre : [insérez-votre-lien-vercel-ici]
+Démo dans le lien ci-contre : generateur-entretien-ia.vercel.app
 
 ## Présentation Globale
 
@@ -44,7 +44,7 @@ ANGLAIS
 
 An AI-powered technical interview simulator.
 
-Demo in the link to the right: [insert-your-vercel-link-here]
+Demo in the link to the right: generateur-entretien-ia.vercel.app
 
 ## Overview
 
@@ -90,7 +90,7 @@ ESPAGNOL
 
 Un simulador de entrevistas técnicas con IA.
 
-Demostración en el enlace de la derecha: [insertar enlace de Vercel aquí]
+Demostración en el enlace de la derecha: generateur-entretien-ia.vercel.app
 
 ## Descripción general
 
