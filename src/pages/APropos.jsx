@@ -6,8 +6,18 @@ import logoMistral from '../assets/Mistral_logo.png';
 import logoReact from '../assets/react.svg';
 import logoVite from '../assets/Vite.png';
 import logoEsilv from '../assets/Logo_ESILV.png';
-import cvAlternance from '../assets/CV.pdf';
-import cvStage from '../assets/CV_PALY.pdf';
+import cvStageFR from '../assets/CV_Stage_FR.pdf';
+import cvStageEN from '../assets/CV_Stage_EN.pdf';
+import cvAlternanceFR from '../assets/CV_Alternance_FR.pdf';
+import cvAlternanceEN from '../assets/CV_Alternance_EN.pdf';
+
+// CV en français pour l'interface française, CV en anglais pour l'anglais et l'espagnol
+const cvParLangue = {
+  fr: { stage: cvStageFR, alternance: cvAlternanceFR, suffixe: 'FR' },
+  en: { stage: cvStageEN, alternance: cvAlternanceEN, suffixe: 'EN' },
+  es: { stage: cvStageEN, alternance: cvAlternanceEN, suffixe: 'EN' }
+};
+
 
 const styles = {
   container: "w-full max-w-3xl mx-auto pt-10 pb-20 px-6 flex flex-col items-center animate-in fade-in duration-700 selection:bg-[#D4AF37] selection:text-black",
@@ -108,6 +118,7 @@ const translations = {
 
 export default function APropos({ lang }) {
   const t = translations[lang];
+  const cv = cvParLangue[lang] || cvParLangue.en;
 
   const baseLogoClass = "w-auto object-contain opacity-70";
 
@@ -202,7 +213,7 @@ export default function APropos({ lang }) {
               <p className="text-neutral-400 mb-2">{t.stageDate}</p>
               <p className="text-neutral-500 font-medium text-[11px] uppercase tracking-wider">{t.location}</p>
             </div>
-            <a href={cvStage} download="Boris_PALY_CV_Stage.pdf" className={styles.cvBtn}>
+            <a href={cv.stage} download={`Boris_PALY_CV_Stage_${cv.suffixe}.pdf`} className={styles.cvBtn}>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               {t.btnCvStage}
             </a>
@@ -215,7 +226,7 @@ export default function APropos({ lang }) {
               <p className="text-neutral-400 mb-2">{t.altDate}</p>
               <p className="text-neutral-500 font-medium text-[11px] uppercase tracking-wider">{t.location}</p>
             </div>
-            <a href={cvAlternance} download="Boris_PALY_CV_Alternance.pdf" className={styles.cvBtn}>
+            <a href={cv.alternance} download={`Boris_PALY_CV_Alternance_${cv.suffixe}.pdf`} className={styles.cvBtn}>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               {t.btnCvAlt}
             </a>
